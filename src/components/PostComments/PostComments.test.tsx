@@ -7,4 +7,33 @@ describe('Teste para o componente PostComment', () => {
         render(<PostComment/>);
         expect(screen.getByText('Comentar')).toBeInTheDocument();
     });
+
+
+    test('deve renderizar dois comentarios', () => {
+        const comentarios = [
+            {   
+                id: '1',
+                comment: 'Comentario N° 1',
+            },
+            {   
+                id: '2',
+                comment: 'Comentario N° 2',
+            },
+        ]        
+        
+        render(<PostComment />)
+
+        comentarios.forEach(el => {
+            fireEvent.change(screen.getByTestId('comment-input'), {
+                target: {
+                    value: el.comment
+                },
+            })
+            
+            fireEvent.click(screen.getByTestId('btn-add-coment'))
+        });
+
+        const renderElements = screen.getByTestId('comments-list').getElementsByTagName('li');
+        expect(renderElements).toHaveLength(2)
+    })
 });
